@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: triton-gemm
+  labels:
+    app: triton-gemm
+spec:
+  containers:
+  - name: triton-gemm
+    image: quay.io/grpereir/triton-gemm:latest
+    resources:
+      limits:
+        nvidia.com/gpu: 1  # Request a single GPU
+    env:
+    - name: CUDA_VISIBLE_DEVICES
+      value: "0"  # Use the first available GPU
+  restartPolicy: Never  # Only run this script once
+  tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
